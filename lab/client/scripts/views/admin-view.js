@@ -14,6 +14,7 @@ var app = app || {};
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // The token is not cleared out of local storage. Anyone who happens to checkout local storage can obtain token and log in as admin. Therefore, I disagree with this structure. 
       $.get(`${__API_URL__}/api/v1/admin`, {token})
         .then(res => {
           localStorage.token = true;

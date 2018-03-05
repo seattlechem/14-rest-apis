@@ -56,6 +56,7 @@ var __API_URL__ = 'http://localhost:3000';
     .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  //This is called in the bookView.initSearchFormPage(). An object literal called "book" is passed and it has properties for title, author and isbn, and the data entered by user on the search form is saved onto these properties. bookView.initSearchResultsPage is callback method.
   Book.find = (book, callback) =>
     $.get(`${__API_URL__}/api/v1/books/find`, book)
       .then(Book.loadAll)
@@ -63,6 +64,7 @@ var __API_URL__ = 'http://localhost:3000';
       .catch(errorCallback)
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // It is called in the bookView.initSearchResultsPage(). It finds the specific book by its ISBN. Once server.js pass the data received from database, then the Book.create() is invoked to add that book to the user's books.
   Book.findOne = isbn =>
     $.get(`${__API_URL__}/api/v1/books/find/${isbn}`)
     .then(Book.create)
