@@ -82,14 +82,17 @@ var app = app || {};
   };
 
 // COMMENT: What is the purpose of this method?
+// If user enters title, author, and isbn information in the search form, it invokes Book.find method to search for a book via google books API by entered information and returns the results to the search results container.
   bookView.initSearchFormPage = function() {
     resetView();
     $('.search-view').show();
     $('#search-form').on('submit', function(event) {
       // COMMENT: What default behavior is being prevented here?
+      // Since the default behavior of form submit is page refresh, it prevents the page from refreshed (reloaded).
       event.preventDefault();
 
       // COMMENT: What is the event.target, below? What will happen if the user does not provide the information needed for the title, author, or isbn properties?
+      // The event.target is data submitted when #search-form is clicked. If the user does not provide the information for the corresponding input box, it will be saved as emptry string.
       let book = {
         title: event.target.title.value || '',
         author: event.target.author.value || '',
@@ -99,6 +102,8 @@ var app = app || {};
       module.Book.find(book, bookView.initSearchResultsPage);
 
       // COMMENT: Why are these values set to an empty string?
+      // It clears the information in the book object for the next search.
+
       event.target.title.value = '';
       event.target.author.value = '';
       event.target.isbn.value = '';
@@ -106,23 +111,29 @@ var app = app || {};
   }
 
   // COMMENT: What is the purpose of this method?
+  // This takes book objects and append to #search-list. Once the results are populated in the html page, then users are able to add books to their books list.
   bookView.initSearchResultsPage = function() {
     resetView();
     $('.search-results').show();
     $('#search-list').empty();
 
     // COMMENT: Explain how the .map() method is being used below.
+    // map() was used to append each book object in the results data array into #search-list. 
     module.Book.all.map(book => $('#search-list').append(book.toHtml()));
     $('.detail-button a').text('Add to list').attr('href', '/');
     $('.detail-button').on('click', function(e) {
       // COMMENT: Explain the following line of code.
+      // This traverses to the three immediate parents and find a value for data attribute called 'bookid' and pass onto Book.findOne().
       module.Book.findOne($(this).parent().parent().parent().data('bookid'))
     });
   }
 
   // COMMENT: Explain the following line of code. 
+  // it assigns module.bookView as bookView, so that it can be called using app namespace.
+
   module.bookView = bookView;
   
   // COMMENT: Explain the following line of code. 
+  // this is namespace added to this IIFE so that methods included in this IIFE can be accessed using app. namespace.
 })(app)
 
